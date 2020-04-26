@@ -23,15 +23,15 @@ public class StockData {
                     filePath);
         }
 
-        Scanner sc = new Scanner(stock_file);
-        String line = sc.nextLine();
+        Scanner strt = new Scanner(stock_file);
+        String line = strt.nextLine();
 
         FileWriter new_stock_file = new FileWriter("data_out/" + stock + ".csv");
         new_stock_file.write(line + ",Change" + "\n");
 
-        while (sc.hasNextLine()) {
+        while (strt.hasNextLine()) {
             
-            line = sc.nextLine();
+            line = strt.nextLine();
             String[] position = line.split(",");
             
             float value_from_opening = Float.valueOf(position[1]);
