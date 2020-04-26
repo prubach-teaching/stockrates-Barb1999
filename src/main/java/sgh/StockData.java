@@ -15,38 +15,28 @@ public class StockData {
     public static void getAndProcessChange(String stock) throws IOException {
         String filePath = "data_in/" + stock + ".csv";
          File stock_file = new File(filePath);
-        boolean exists = stock_file.exists();
-
-        if (exists == false) {
+        boolean czyistnieje = stock_file.exists();
+        if (czyistnieje == false) {
             download("https://query1.finance.yahoo.com/v7/finance/download/" + stock +
                             "?period1=1554504399&period2=1586126799&interval=1d&events=history",
                     filePath);
         }
-
         Scanner strt = new Scanner(stock_file);
-        String line = strt.nextLine();
+        String linijka = strt.nextLine();
 
         FileWriter new_stock_file = new FileWriter("data_out/" + stock + ".csv");
-        new_stock_file.write(line + ",Change" + "\n");
+        new_stock_file.write(linijka + ",Change" + "\n");
 
         while (strt.hasNextLine()) {
-            
-            line = strt.nextLine();
-            String[] position = line.split(",");
-            
-            float value_from_opening = Float.valueOf(position[1]);
-            float value_from_closing = Float.valueOf(position[4]);
-            
-            float percentage_change = (value_from_closing - value_from_opening) / value_from_opening;
-            new_stock_file.write(line + "," + percentage_change * 100 + "\n");
+            linijka = strt.nextLine();
+            String[] pozycja = linijka.split(",");
+            float otwarcie = Float.valueOf(pozycja[1]);
+            float zamkniecie = Float.valueOf(pozycja[4]);
+            float zmiana = (zamkniecie - otwarcie) / otwarcie;
+            new_stock_file.write(linijka + "," + zmiana * 100 + "\n");
         }
-        
         new_stock_file.close();
-    
     }
-
-    
-
     public static void download(String url, String fileName) throws IOException {
         try (InputStream in = URI.create(url).toURL().openStream()) {
             Files.copy(in, Paths.get(fileName));
